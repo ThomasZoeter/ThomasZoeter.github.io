@@ -41,14 +41,15 @@
 </div>
 
 <script>
+    var turn = 0;
 
     function writeText(id) {
-        var turn = 1;
+        turn += 1;
 
         const fieldsLeft = [];
         for (let i = 1; i <= 9; i++) {
             const id = "field" + i;
-            if(document.getElementById(id).innerHTML !== "X" || document.getElementById(id).innerHTML !== "O") {
+            if (!(document.getElementById(id).innerHTML === "X" || document.getElementById(id).innerHTML === "O")) {
                 fieldsLeft.push(i);
             }
         }
@@ -56,21 +57,11 @@
             gameHasEnded();
         }
         var player = "X";
-        var nextPlayer = "X";
-        if (id.style.backgroundColor !== "gray" && fieldsLeft.includes(id.innerHTML) ) {
-            if (turn % 2 === 0) {
-                player = "X";
-                nextPlayer = "O"
-            } else {
-                player = "O";
-                nextPlayer = "X";
-            }
-        }
-        document.getElementById("player").innerHTML = nextPlayer;
+        var nextPlayer = "O";
         id.innerHTML = player;
         id.style.backgroundColor = "gray";
-        turn += 1;
-        var youHaveWon = gameWinner("X");
+        document.getElementById("player").innerHTML = "O";
+        const youHaveWon = gameWinner("X");
         if (youHaveWon) {
             if (confirm("YOU WON!")) {
                 txt = "OK!";
@@ -78,7 +69,7 @@
             }
         }
         // opponent's turn
-        setTimeout(opponentTurn,2000)
+        setTimeout(opponentTurn, 2000)
         turn += 1;
     }
 
@@ -87,14 +78,14 @@
         const fieldsLeft = [];
         for (let i = 1; i <= 9; i++) {
             const id = "field" + i;
-            if(!(document.getElementById(id).innerHTML === "X" || document.getElementById(id).innerHTML === "O")) {
+            if (!(document.getElementById(id).innerHTML === "X" || document.getElementById(id).innerHTML === "O")) {
                 fieldsLeft.push(i);
             }
         }
         const choice = Math.floor(Math.random() * fieldsLeft.length)
         const fieldChosen = "field" + fieldsLeft[choice];
-        document.getElementById(fieldChosen).innerHTML = player;
         document.getElementById(fieldChosen).style.backgroundColor = "gray";
+        document.getElementById(fieldChosen).innerHTML = "O";
         var youHaveLost = gameWinner("O");
         if (youHaveLost) {
             if (confirm("YOU LOST!")) {
@@ -102,6 +93,7 @@
                 location.reload();
             }
         }
+        document.getElementById("player").innerHTML = "X";
     }
 
     function hideOrUnhide() {
@@ -114,19 +106,19 @@
     }
 
     function gameWinner(player) {
-        if (rowCheck("field1","field2","field3",player) ||
-            rowCheck("field4","field5","field6",player) ||
-            rowCheck("field7","field8","field9",player) ||
-            rowCheck("field1","field4","field7",player) ||
-            rowCheck("field2","field5","field8",player) ||
-            rowCheck("field3","field6","field9",player) ||
-            rowCheck("field1","field5","field9",player) ||
-            rowCheck("field3","field5","field7",player)) {
+        if (rowCheck("field1", "field2", "field3", player) ||
+            rowCheck("field4", "field5", "field6", player) ||
+            rowCheck("field7", "field8", "field9", player) ||
+            rowCheck("field1", "field4", "field7", player) ||
+            rowCheck("field2", "field5", "field8", player) ||
+            rowCheck("field3", "field6", "field9", player) ||
+            rowCheck("field1", "field5", "field9", player) ||
+            rowCheck("field3", "field5", "field7", player)) {
             return true;
         }
     }
 
-    function rowCheck(f1,f2,f3,player) {
+    function rowCheck(f1, f2, f3, player) {
         if (document.getElementById(f1).innerHTML === player &&
             document.getElementById(f2).innerHTML === player &&
             document.getElementById(f3).innerHTML === player) {
